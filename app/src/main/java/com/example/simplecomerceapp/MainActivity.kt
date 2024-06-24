@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -56,7 +56,7 @@ fun Hello(modifier: Modifier = Modifier) {
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = null,
                 modifier = modifier.size(
-                   50.dp
+                    50.dp
                 )
             )
             Text(
@@ -76,26 +76,39 @@ fun Hello(modifier: Modifier = Modifier) {
                 color = Color.White.copy(alpha = 0.5f),
                 fontSize = 28.sp
 
-                )
-            Text(text = "Musical instrument",
+            )
+            Text(
+                text = "Musical instrument",
                 color = Color.White.copy(alpha = 0.5f),
                 fontSize = 28.sp
 
             )
         }
-        Image(alignment = Alignment.BottomStart,
-            painter = painterResource(id = R.drawable.women), contentDescription = "women", modifier = Modifier.fillMaxSize())
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                alignment = Alignment.BottomStart,
+                painter = painterResource(id = R.drawable.women),
+                contentDescription = "women",
+                modifier = Modifier.fillMaxSize()
+            )
 
-
+        }
 
 
     }
 }
+
+
+
 @Preview(showSystemUi = true)
 @Composable
 private fun Hh() {
     Hello()
+
+
 }
+
+
 
 
 
