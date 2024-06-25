@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -152,7 +151,7 @@ fun SwipeToAccessButton(    modifier: Modifier,
         Box(
             modifier = Modifier
                 .width(width)
-                .clip(RoundedCornerShape(5.dp))
+               .clip(CircleShape)
                 .border(
                     BorderStroke(1.5.dp, Color.White),
                     shape = CircleShape
@@ -166,6 +165,7 @@ fun SwipeToAccessButton(    modifier: Modifier,
 
                     )
                 .background(Color.Transparent)
+
         ) {
 
             Icon(
