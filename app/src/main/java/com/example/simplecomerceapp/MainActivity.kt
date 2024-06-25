@@ -27,6 +27,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +49,7 @@ import androidx.wear.compose.material.SwipeableState
 import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
 import com.example.simplecomerceapp.ui.theme.primary
+import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
@@ -112,8 +118,8 @@ fun Hello(modifier: Modifier = Modifier) {
             )
             SwipeToAccessButton(modifier = Modifier
                 .fillMaxSize()
-                .wrapContentSize(Alignment.BottomCenter))
-
+                .wrapContentSize(Alignment.BottomCenter)
+            )
         }
 
 
@@ -129,85 +135,78 @@ fun SwipeToAccessButton(    modifier: Modifier,
     val width = 300.dp
     val swappableState: SwipeableState<Int> = rememberSwipeableState(0)
     val sizePx = with(LocalDensity.current) { width.toPx() }
-    val anchors = mapOf(0f to 0, sizePx to 1)
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
+    val anchors = mapOf(0f to 0, sizePx to 1 )
+    var show by remember { mutableStateOf(false) }
+
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom,
         modifier = modifier
             .fillMaxSize()
-            .padding(bottom = 60.dp)){
-
-    Box(
-        modifier = Modifier
-            .width(width)
-            .clip(RoundedCornerShape(5.dp))
-            .border(
-                BorderStroke(1.5.dp, Color.White,), shape = CircleShape
+            .padding(
+                bottom = 60.dp
             )
-
-            .swipeable(
-                state = swappableState,
-                anchors = anchors,
-                thresholds = { _, _ -> FractionalThreshold(0.7f) },
-                orientation = Orientation.Horizontal
-            )
-
-            .background(Color.Transparent)
-
-
-
-
-    ){
-
-        Icon(painter = dragnet,
-            contentDescription = "DragButton",
-            tint = Color.White,
-            modifier = Modifier
-                .background(Color.Transparent)
-                .offset { IntOffset(swappableState.offset.value.roundToInt(), 0) }
-                .padding(10.dp)
-
-            ,
-
-        )
-    }
-
-    }
-}
-
-@OptIn(ExperimentalWearMaterialApi::class)
-@Composable
-fun Swipe(modifier: Modifier = Modifier) {
-    val width = 600.dp
-    val squareSize = 48.dp
-    val swipeableState = rememberSwipeableState(0)
-    val sizePx = with(LocalDensity.current) { width.toPx() }
-    val anchors = mapOf(0f to 0, sizePx to 1) // Maps anchor points (in px) to states
-
-    Box(
-        modifier = Modifier
-            .width(width)
-            .swipeable(
-                state = swipeableState,
-                anchors = anchors,
-                thresholds = { _, _ -> FractionalThreshold(0.3f) },
-                orientation = Orientation.Horizontal
-            )
-            .background(Color.Red)
-
     ) {
+
         Box(
-            Modifier
-                .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
-                .size(squareSize)
-                .background(Color.DarkGray)
-        )
+            modifier = Modifier
+                .width(width)
+                .clip(RoundedCornerShape(5.dp))
+                .border(
+                    BorderStroke(1.5.dp, Color.White),
+                    shape = CircleShape
+                )
+
+                .swipeable(
+                    state = swappableState,
+                    anchors = anchors,
+                    thresholds = { _, _ -> FractionalThreshold(0.7f) },
+                    orientation = Orientation.Horizontal,
+
+                    )
+                .background(Color.Transparent)
+        ) {
+
+            Icon(
+                painter = dragnet,
+                contentDescription = "DragButton",
+                tint = Color.White,
+                modifier = Modifier
+                    .background(Color.Transparent)
+                    .offset { IntOffset(swappableState.offset.value.roundToInt(), 0) }
+                    .padding(10.dp),
+
+                )
+
+        }
+        if (show) {
+            Text(
+                text = "Thank You For Swiping",
+                color = Color.Black,
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 20.dp)
+            )
+        }
     }
-}
+
+        LaunchedEffect(swappableState.currentValue) {
+            if (swappableState.currentValue == 1) {
+                show= true
+                delay(1000)
+                swappableState.animateTo(0)
+            }
+        }
+    }
+
+
+
 
 
 @Preview(showBackground = true)
 @Composable
-private fun Hh() {
+fun Hh() {
     Box(modifier = Modifier.fillMaxSize()){
 Hello()
 
