@@ -37,7 +37,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -151,7 +153,7 @@ fun SwipeToAccessButton(    modifier: Modifier,
         Box(
             modifier = Modifier
                 .width(width)
-               .clip(CircleShape)
+                .clip(CircleShape)
                 .border(
                     BorderStroke(1.5.dp, Color.White),
                     shape = CircleShape
@@ -165,19 +167,35 @@ fun SwipeToAccessButton(    modifier: Modifier,
 
                     )
                 .background(Color.Transparent)
-
         ) {
 
-            Icon(
-                painter = dragnet,
-                contentDescription = "DragButton",
-                tint = Color.White,
-                modifier = Modifier
-                    .background(Color.Transparent)
-                    .offset { IntOffset(swappableState.offset.value.roundToInt(), 0) }
-                    .padding(10.dp),
+
+            Row {
+                Icon(
+                    painter = dragnet,
+                    contentDescription = "DragButton",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .background(Color.Transparent)
+                        .offset { IntOffset(swappableState.offset.value.roundToInt(), 0) }
+                        .padding(10.dp)
+
+                    )
+                Spacer(modifier = Modifier.width(40.dp))
+                Text(text = "SWIPE TO UNLOCK",
+                    fontFamily = FontFamily.SansSerif, // sans-serif font
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .offset { IntOffset(swappableState.offset.value.roundToInt(), 0) }
+
+
 
                 )
+
+            }
 
         }
         if (show) {
