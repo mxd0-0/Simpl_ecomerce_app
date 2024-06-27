@@ -5,9 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -117,9 +119,10 @@ fun Hello(modifier: Modifier = Modifier) {
                 contentDescription = "women",
                 modifier = Modifier.fillMaxSize()
             )
-            SwipeToAccessButton(modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize(Alignment.BottomCenter)
+            SwipeToAccessButton(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(Alignment.BottomCenter)
             )
         }
 
@@ -128,16 +131,17 @@ fun Hello(modifier: Modifier = Modifier) {
 }
 
 //onClick: () -> Unit
-@OptIn(ExperimentalWearMaterialApi::class)
+@OptIn(ExperimentalWearMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun SwipeToAccessButton(    modifier: Modifier,
-                            ) {//width.toPx() to "End"
+fun SwipeToAccessButton(modifier: Modifier) {//width.toPx() to "End"
     val dragnet = painterResource(id = R.drawable.btn)
     val width = 300.dp
     val swappableState: SwipeableState<Int> = rememberSwipeableState(0)
     val sizePx = with(LocalDensity.current) { width.toPx() }
-    val anchors = mapOf(0f to 0, sizePx to 1 )
+    val anchors = mapOf(0f to 0, sizePx to 1)
     var show by remember { mutableStateOf(false) }
+    var show1 by remember { mutableStateOf(false) }
+    var showText by remember { mutableStateOf(true) }
 
 
     Column(
@@ -149,7 +153,6 @@ fun SwipeToAccessButton(    modifier: Modifier,
                 bottom = 60.dp
             )
     ) {
-
         Box(
             modifier = Modifier
                 .width(width)
@@ -158,19 +161,17 @@ fun SwipeToAccessButton(    modifier: Modifier,
                     BorderStroke(1.5.dp, Color.White),
                     shape = CircleShape
                 )
-
                 .swipeable(
                     state = swappableState,
                     anchors = anchors,
                     thresholds = { _, _ -> FractionalThreshold(0.7f) },
-                    orientation = Orientation.Horizontal,
-
-                    )
+                    orientation = Orientation.Horizontal
+                )
                 .background(Color.Transparent)
         ) {
 
 
-            Row {
+            Row(modifier = Modifier.fillMaxWidth()) {
                 Icon(
                     painter = dragnet,
                     contentDescription = "DragButton",
@@ -178,59 +179,60 @@ fun SwipeToAccessButton(    modifier: Modifier,
                     modifier = Modifier
                         .background(Color.Transparent)
                         .offset { IntOffset(swappableState.offset.value.roundToInt(), 0) }
-                        .padding(10.dp)
-
-                    )
-                Spacer(modifier = Modifier.width(40.dp))
-                Text(text = "SWIPE TO UNLOCK",
-                    fontFamily = FontFamily.SansSerif, // sans-serif font
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .offset { IntOffset(swappableState.offset.value.roundToInt(), 0) }
-
+                        .padding(9.dp)
 
 
                 )
+                Spacer(modifier = Modifier.width(40.dp))
+                if (swappableState.offset.value == 0f) {
+
+                    Text(
+                        text = "SWIPE TO UNLOCK",
+                        fontFamily = FontFamily.SansSerif, // sans-serif font
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                    )
+                }
 
             }
-
         }
         if (show) {
+
             Text(
                 text = "Thank You For Swiping",
                 color = Color.Black,
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 20.dp)
+                modifier = Modifier.padding(top = 20.dp),
+                textAlign = TextAlign.Center
             )
         }
+
     }
 
-        LaunchedEffect(swappableState.currentValue) {
-            if (swappableState.currentValue == 1) {
-                show= true
-                delay(1000)
-                swappableState.animateTo(0)
-            }
+    LaunchedEffect(swappableState.currentValue) {
+        if (swappableState.currentValue == 1) {
+            show = true
+            delay(3000)
+            swappableState.animateTo(0)
         }
     }
-
-
-
+}
 
 
 @Preview(showBackground = true)
 @Composable
 fun Hh() {
-    Box(modifier = Modifier.fillMaxSize()){
-Hello()
+    Box(modifier = Modifier.fillMaxSize()) {
+        Hello()
 
     }
 
 }
+
 
 
 
