@@ -51,7 +51,6 @@ import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 
-//onClick: () -> Unit
 @OptIn(ExperimentalWearMaterialApi::class)
 @Composable
 fun SwipeToAccessButton(modifier: Modifier) {//width.toPx() to "End"
