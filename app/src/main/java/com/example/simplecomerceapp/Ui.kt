@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +18,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -33,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -49,6 +53,7 @@ import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 
 @OptIn(ExperimentalWearMaterialApi::class)
@@ -143,53 +148,125 @@ fun SwipeToAccessButton(modifier: Modifier) {//width.toPx() to "End"
 //hello
 
 @Composable
-fun ProductCard(modifier: Modifier = Modifier) {
-    Card(modifier = Modifier.clip(RoundedCornerShape(25.dp)),onClick = { /*TODO*/ }) {
+fun ProductCard(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    pImage: Painter,
+    productName: String,
+    price: Int,
+    like: Boolean,
+    rating: Float
+) {
+    Card(
+        modifier = Modifier
+            .clip(RoundedCornerShape(25.dp))
+            .padding(
+                start = 5.dp,
+                end = 5.dp,
+                top = 10.dp,
+                bottom = 20.dp
+            ), onClick = onClick
+    ) {
         Column(
-            modifier = modifier
-                .wrapContentSize()
-                .padding(16.dp)
+            modifier = modifier.background(Color.White)
+                .wrapContentWidth()
+                .height(350.dp)
+                .padding(10.dp)
+
         ) {
-            Image(painter = painterResource(id = R.drawable.btn_like1), contentDescription ="Like Button",
+            Image(
+                painter = if (like) painterResource(id = R.drawable.btn_like1) else painterResource(
+                    id = R.drawable.btn_unlike
+                ),
+                contentDescription = "Like Button",
                 modifier = Modifier
                     .size(24.dp)
-                    .align(Alignment.End))
+                    .align(Alignment.End)
+            )
             Image(
-                painter = painterResource(id = R.drawable.photo),
-                contentDescription = "Shoe",
+                painter = pImage,
+                contentDescription = "ProductName",
                 alignment = Alignment.Center,
                 modifier = Modifier
                     .size(200.dp)
                     .clip(CircleShape)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "Saxophone Name",
-                fontSize = 20.sp,
+                text = productName,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 10.dp , bottom = 10.dp)
+                modifier = Modifier
+                    .padding(top = 5.dp, bottom = 5.dp)
+                    .fillMaxWidth()
+                    .height(47.dp)
             )
             Text(
-                text = "$27,00",
+                text = "$$price",
                 fontSize = 16.sp,
                 color = Color.Blue
             )
             Spacer(modifier = Modifier.height(5.dp))
             RatingBar(
-                5f,
-                modifier = Modifier.height(10.dp)
+                rating,
+                modifier = Modifier.height(17.dp)
             )
 
         }
 
     }
 
-    
+
 }
 
-@Preview
 @Composable
-private fun CardPreview() {
-    ProductCard()
+fun SaxophoneProducts() {
+    val color = Color(0xFFF5EDE1)
+    val productNames = listOf(
+        "Alto Saxophone",
+        "Tenor Saxophone",
+        "Baritone Saxophone",
+        "Soprano Saxophone",
+        "Bass Saxophone"
+    )
+    Column {
+        Text(
+            text = "Saxophone Product",
+            fontSize = 23.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(top = 40.dp, start = 15.dp, bottom = 10.dp)
+        )
+
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(
+                start = 10.dp,
+                end = 10.dp,
+                top = 10.dp,
+                bottom = 10.dp
+            ),
+            modifier = Modifier
+                .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+                .background(color)
+        ) {
+            items(6) {
+                ProductCard(
+                    pImage = painterResource(id = R.drawable.photo),
+                    productName = productNames.random(),
+                    price = Random.nextInt(from = 100, until = 350),
+                    rating = Random.nextFloat() * (5.0f - 1.0f) + 1.0f,
+                    like = Random.nextBoolean()
+                )
+            }
+        }
+    }
 
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun He() {
+    SaxophoneProducts()
+}
+
