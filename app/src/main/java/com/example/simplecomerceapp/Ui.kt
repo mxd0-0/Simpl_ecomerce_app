@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -168,7 +169,8 @@ fun ProductCard(
             ), onClick = onClick
     ) {
         Column(
-            modifier = modifier.background(Color.White)
+            modifier = modifier
+                .background(Color.White)
                 .wrapContentWidth()
                 .height(350.dp)
                 .padding(10.dp)
@@ -229,12 +231,27 @@ fun SaxophoneProducts() {
         "Soprano Saxophone",
         "Bass Saxophone"
     )
-    Column {
+    Column(modifier = Modifier
+        .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)).background(color).fillMaxSize()
+    ) {
+        Text(
+            text = "Choose Type",
+            fontSize = 23.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(top = 40.dp, start = 15.dp, bottom = 10.dp)
+        )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+            ShowType(painterResource(id = R.drawable.saxophone))
+            ShowType(painterResource(id = R.drawable.gutar))
+            ShowType(painterResource(id = R.drawable.piano))
+        }
+
+
         Text(
             text = "Saxophone Product",
             fontSize = 23.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 40.dp, start = 15.dp, bottom = 10.dp)
+            modifier = Modifier.padding(top = 25.dp, start = 15.dp, bottom = 10.dp)
         )
 
 
@@ -243,12 +260,11 @@ fun SaxophoneProducts() {
             contentPadding = PaddingValues(
                 start = 10.dp,
                 end = 10.dp,
-                top = 10.dp,
+
                 bottom = 10.dp
             ),
             modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
-                .background(color)
+                .background(Color.Transparent)
         ) {
             items(6) {
                 ProductCard(
@@ -264,9 +280,35 @@ fun SaxophoneProducts() {
 
 }
 
+@Composable
+fun ShowType(image : Painter) {
+    Card(modifier = Modifier.size(width = 100.dp, height = 64.dp),
+        shape = RoundedCornerShape(13.dp),
+        colors = CardColors(
+            containerColor = Color.White,
+            contentColor = Color.Black,
+            disabledContentColor = Color.LightGray,
+            disabledContainerColor = Color.White
+        )
+
+
+    ) {
+        Image(
+            painter = image,
+            contentDescription = "Type",
+            alignment = Alignment.Center,
+            modifier = Modifier
+                .padding(13.dp)
+                .fillMaxSize()
+        )
+    }
+
+}
+
+
 @Preview(showBackground = true)
 @Composable
 private fun He() {
-    SaxophoneProducts()
+SaxophoneProducts()
 }
 
