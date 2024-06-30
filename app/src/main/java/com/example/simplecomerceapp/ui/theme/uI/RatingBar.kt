@@ -1,4 +1,4 @@
-package com.example.simplecomerceapp
+package com.example.simplecomerceapp.ui.theme.uI
 
 
 import androidx.compose.foundation.Canvas

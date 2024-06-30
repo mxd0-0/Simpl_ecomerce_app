@@ -1,4 +1,4 @@
-package com.example.simplecomerceapp
+package com.example.simplecomerceapp.ui.theme.uI
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -47,19 +47,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.FractionalThreshold
 import androidx.wear.compose.material.SwipeableState
 import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
-import kotlinx.coroutines.delay
+import com.example.simplecomerceapp.R
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 
 @OptIn(ExperimentalWearMaterialApi::class)
 @Composable
-fun SwipeToAccessButton(modifier: Modifier) {//width.toPx() to "End"
+fun SwipeToAccessButton(navController: NavController,   /** onNavigate: () -> Unit
+                            ,*/modifier: Modifier) {//width.toPx() to "End"
     val dragnet = painterResource(id = R.drawable.btn)
     val width = 300.dp
     val swappableState: SwipeableState<Int> = rememberSwipeableState(0)
@@ -125,15 +127,9 @@ fun SwipeToAccessButton(modifier: Modifier) {//width.toPx() to "End"
             }
         }
         if (show) {
+            navController.navigate("Home")
 
-            Text(
-                text = "Thank You For Swiping",
-                color = Color.Black,
-                fontSize = 40.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 20.dp),
-                textAlign = TextAlign.Center
-            )
+
         }
 
     }
@@ -141,8 +137,7 @@ fun SwipeToAccessButton(modifier: Modifier) {//width.toPx() to "End"
     LaunchedEffect(swappableState.currentValue) {
         if (swappableState.currentValue == 1) {
             show = true
-            delay(3000)
-            swappableState.animateTo(0)
+        //    swappableState.animateTo(0)
         }
     }
 }
@@ -232,7 +227,9 @@ fun SaxophoneProducts() {
         "Bass Saxophone"
     )
     Column(modifier = Modifier
-        .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)).background(color).fillMaxSize()
+        .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+        .background(color)
+        .fillMaxSize()
     ) {
         Text(
             text = "Choose Type",
