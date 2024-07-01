@@ -1,9 +1,11 @@
 package com.example.simplecomerceapp.ui.theme.uI
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,12 +25,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +52,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.FractionalThreshold
 import androidx.wear.compose.material.SwipeableState
@@ -60,8 +65,12 @@ import kotlin.random.Random
 
 @OptIn(ExperimentalWearMaterialApi::class)
 @Composable
-fun SwipeToAccessButton(navController: NavController,   /** onNavigate: () -> Unit
-                            ,*/modifier: Modifier) {//width.toPx() to "End"
+fun SwipeToAccessButton(
+    navController: NavController,
+    /** onNavigate: () -> Unit
+    ,*/
+    modifier: Modifier
+) {//width.toPx() to "End"
     val dragnet = painterResource(id = R.drawable.btn)
     val width = 300.dp
     val swappableState: SwipeableState<Int> = rememberSwipeableState(0)
@@ -85,8 +94,7 @@ fun SwipeToAccessButton(navController: NavController,   /** onNavigate: () -> Un
                 .width(width)
                 .clip(CircleShape)
                 .border(
-                    BorderStroke(1.5.dp, Color.White),
-                    shape = CircleShape
+                    BorderStroke(1.5.dp, Color.White), shape = CircleShape
                 )
                 .swipeable(
                     state = swappableState,
@@ -99,8 +107,7 @@ fun SwipeToAccessButton(navController: NavController,   /** onNavigate: () -> Un
 
 
             Row(modifier = Modifier.fillMaxWidth()) {
-                Icon(
-                    painter = dragnet,
+                Icon(painter = dragnet,
                     contentDescription = "DragButton",
                     tint = Color.White,
                     modifier = Modifier
@@ -119,8 +126,7 @@ fun SwipeToAccessButton(navController: NavController,   /** onNavigate: () -> Un
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
+                        modifier = Modifier.align(Alignment.CenterVertically)
                     )
                 }
 
@@ -137,7 +143,7 @@ fun SwipeToAccessButton(navController: NavController,   /** onNavigate: () -> Un
     LaunchedEffect(swappableState.currentValue) {
         if (swappableState.currentValue == 1) {
             show = true
-        //    swappableState.animateTo(0)
+            //    swappableState.animateTo(0)
         }
     }
 }
@@ -157,10 +163,7 @@ fun ProductCard(
         modifier = Modifier
             .clip(RoundedCornerShape(25.dp))
             .padding(
-                start = 5.dp,
-                end = 5.dp,
-                top = 10.dp,
-                bottom = 20.dp
+                start = 5.dp, end = 5.dp, top = 10.dp, bottom = 20.dp
             ), onClick = onClick
     ) {
         Column(
@@ -199,14 +202,11 @@ fun ProductCard(
                     .height(47.dp)
             )
             Text(
-                text = "$$price",
-                fontSize = 16.sp,
-                color = Color.Blue
+                text = "$$price", fontSize = 16.sp, color = Color.Blue
             )
             Spacer(modifier = Modifier.height(5.dp))
             RatingBar(
-                rating,
-                modifier = Modifier.height(17.dp)
+                rating, modifier = Modifier.height(17.dp)
             )
 
         }
@@ -226,10 +226,11 @@ fun SaxophoneProducts() {
         "Soprano Saxophone",
         "Bass Saxophone"
     )
-    Column(modifier = Modifier
-        .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
-        .background(color)
-        .fillMaxSize()
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+            .background(color)
+            .fillMaxSize()
     ) {
         Text(
             text = "Choose Type",
@@ -253,15 +254,11 @@ fun SaxophoneProducts() {
 
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(
-                start = 10.dp,
-                end = 10.dp,
+            columns = GridCells.Fixed(2), contentPadding = PaddingValues(
+                start = 10.dp, end = 10.dp,
 
                 bottom = 10.dp
-            ),
-            modifier = Modifier
-                .background(Color.Transparent)
+            ), modifier = Modifier.background(Color.Transparent)
         ) {
             items(6) {
                 ProductCard(
@@ -278,8 +275,9 @@ fun SaxophoneProducts() {
 }
 
 @Composable
-fun ShowType(image : Painter) {
-    Card(modifier = Modifier.size(width = 100.dp, height = 64.dp),
+fun ShowType(image: Painter) {
+    Card(
+        modifier = Modifier.size(width = 100.dp, height = 64.dp),
         shape = RoundedCornerShape(13.dp),
         colors = CardColors(
             containerColor = Color.White,
@@ -302,10 +300,79 @@ fun ShowType(image : Painter) {
 
 }
 
+@Composable
+fun ProductDescription(modifier: Modifier = Modifier) {
+    Column {
+        Text(
+            text = "Color", fontSize = 20.sp, fontWeight = FontWeight.Bold
+        )
 
+    }
+}
+
+@Composable
+fun ColorPicker(
+    colors: List<Color>, selectedColor: MutableState<Color>
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(text = "Colour", fontSize = 16.sp, color = Color.Black)
+        Spacer(modifier = Modifier.width(16.dp))
+        colors.forEach { color ->
+            Box(modifier = Modifier
+                .size(24.dp)
+                .background(
+                    color = color, shape = CircleShape
+                )
+                .clickable { selectedColor.value = color }
+                .border(
+                    width = if (color == selectedColor.value) 3.dp else 0.dp,
+                    color = if (color == selectedColor.value) Color.White else Color.Transparent,
+                    shape = CircleShape
+                ))
+        }
+    }
+}
+
+@Composable
+fun TextDescription(modifier: Modifier = Modifier) {
+    val color1 = Color(0xFFF5EDE1)
+    Column {
+        Text(text = "Details", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Includes")
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Case for Saxophone \"GL CASES\" (The specification of a custom-made product by Wood Stone) Neck Swab Body Swab Cloth Smooth Pad")
+        Spacer(modifier = Modifier.height(8.dp))
+        Row {
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(Color.Blue),
+                shape = CircleShape
+            ) {
+
+            }
+        }
+
+    }
+}
+
+@Preview
+@Composable
+private fun text() {
+    TextDescription()
+
+}
+
+@SuppressLint("UnrememberedMutableState")
 @Preview(showBackground = true)
 @Composable
-private fun He() {
-SaxophoneProducts()
+private fun PreviewColorPicker() {
+    val colors = listOf(Color(0xFFFFC107), Color(0xFFBDBDBD), Color.Black)
+    var selectedColor by remember { mutableStateOf(Color(0xFFBDBDBD)) }
+
+    ColorPicker(colors = colors, selectedColor = mutableStateOf(selectedColor))
 }
 
