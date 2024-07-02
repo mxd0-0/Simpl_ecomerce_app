@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -52,7 +53,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.FractionalThreshold
 import androidx.wear.compose.material.SwipeableState
@@ -314,52 +314,86 @@ fun ProductDescription(modifier: Modifier = Modifier) {
 fun ColorPicker(
     colors: List<Color>, selectedColor: MutableState<Color>
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    Column(
+        modifier = Modifier.fillMaxWidth()
+
     ) {
-        Text(text = "Colour", fontSize = 16.sp, color = Color.Black)
-        Spacer(modifier = Modifier.width(16.dp))
-        colors.forEach { color ->
-            Box(modifier = Modifier
-                .size(24.dp)
-                .background(
-                    color = color, shape = CircleShape
+        Text(text = "Color", fontSize = 16.sp, color = Color.Black)
+        Spacer(modifier = Modifier.height(10.dp))
+          Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start){
+            colors.forEach { color ->
+                Box(modifier = Modifier
+                    .size(24.dp)
+                    .background(
+                        color = color, shape = CircleShape
+                    )
+                    .clickable { selectedColor.value = color }
+                    .border(
+                        width = if (color == selectedColor.value) 3.dp else 0.dp,
+                        color = if (color == selectedColor.value) Color.White else Color.Transparent,
+                        shape = CircleShape
+                    )
+                    .padding(vertical = 10.dp)
                 )
-                .clickable { selectedColor.value = color }
-                .border(
-                    width = if (color == selectedColor.value) 3.dp else 0.dp,
-                    color = if (color == selectedColor.value) Color.White else Color.Transparent,
-                    shape = CircleShape
-                ))
+                Spacer(modifier = Modifier.width(15.dp) )
+            }
         }
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun TextDescription(modifier: Modifier = Modifier) {
     val color1 = Color(0xFFF5EDE1)
-    Column {
+    val orange = Color(0xFFFFB84D)
+    val colors = listOf(Color(0xFFFFC107), Color(0xFFBDBDBD), Color.Black)
+    val selectedColor by remember { mutableStateOf(Color(0xFFBDBDBD)) }
+
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
+            .background(Color.White)
+            .fillMaxWidth()
+            .padding(15.dp),
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        ColorPicker(colors = colors, selectedColor = mutableStateOf(selectedColor))
+        Spacer(modifier = Modifier.height(10.dp))
         Text(text = "Details", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Includes")
+        Text(text = "Includes:")
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Case for Saxophone \"GL CASES\" (The specification of a custom-made product by Wood Stone) Neck Swab Body Swab Cloth Smooth Pad")
         Spacer(modifier = Modifier.height(8.dp))
-        Row {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+        ) {
             Button(
                 onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(Color.Blue),
-                shape = CircleShape
+                colors = ButtonDefaults.buttonColors(containerColor = color1),
+                modifier = Modifier.width(156.dp)
             ) {
+                Text(text = "Add to Cart", color = Color.Black)
 
             }
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(containerColor = orange),
+                modifier = Modifier.width(156.dp)
+            ) {
+                Text(text = "Buy Now", color = Color.White)
+
+            }
+
+
         }
 
     }
 }
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 private fun text() {
     TextDescription()
@@ -367,11 +401,11 @@ private fun text() {
 }
 
 @SuppressLint("UnrememberedMutableState")
-@Preview(showBackground = true)
+@Preview()
 @Composable
 private fun PreviewColorPicker() {
     val colors = listOf(Color(0xFFFFC107), Color(0xFFBDBDBD), Color.Black)
-    var selectedColor by remember { mutableStateOf(Color(0xFFBDBDBD)) }
+    val selectedColor by remember { mutableStateOf(Color(0xFFBDBDBD)) }
 
     ColorPicker(colors = colors, selectedColor = mutableStateOf(selectedColor))
 }
