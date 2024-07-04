@@ -1,6 +1,7 @@
 package com.example.simplecomerceapp.ui.theme.uI
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +22,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -29,7 +32,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,6 +64,10 @@ import androidx.wear.compose.material.SwipeableState
 import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
 import com.example.simplecomerceapp.R
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -320,7 +329,7 @@ fun ColorPicker(
     ) {
         Text(text = "Color", fontSize = 16.sp, color = Color.Black)
         Spacer(modifier = Modifier.height(10.dp))
-          Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start){
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
             colors.forEach { color ->
                 Box(modifier = Modifier
                     .size(24.dp)
@@ -335,7 +344,7 @@ fun ColorPicker(
                     )
                     .padding(vertical = 10.dp)
                 )
-                Spacer(modifier = Modifier.width(15.dp) )
+                Spacer(modifier = Modifier.width(15.dp))
             }
         }
     }
@@ -393,12 +402,83 @@ fun TextDescription(modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun ProductPhotos(modifier: Modifier = Modifier) {
+    val backgrounf = Color(0xFFF5EDE1)
+    val photos = listOf(
+        R.drawable.gold,
+        R.drawable.silver
+    )
+    val pagerState = rememberPagerState(
+        pageCount =
+        photos.size
+    )
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(2000)
+            val nextpage = (pagerState.currentPage + 1) % photos.size
+            pagerState.animateScrollToPage(nextpage, animationSpec = tween(2000))
+        }
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxHeight(0.5f)
+            .fillMaxWidth()
+            .background(backgrounf)
+    ) {
+        Box(modifier = Modifier.wrapContentSize()) {
+            HorizontalPager(
+                state = pagerState, modifier = Modifier
+                    .padding(26.dp)
+                    .wrapContentSize()
+            ) { currentPage ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(20.dp),
+                    elevation = CardDefaults.cardElevation(3.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = photos[currentPage]),
+                        contentDescription = "Product Photos",
+                        modifier = Modifier.fillMaxSize()
+
+                    )
+
+                }
+            }
+            IconButton(onClick = { /*TODO*/ }) {
+
+                Icon(
+                    painter = ,
+                    contentDescription = "Back",
+                    modifier = Modifier.size(60.dp),
+                    tint =
+                )
+
+            }
+
+        }
+
+    }
+}
+
+
+@Preview(showSystemUi = true)
+@Composable
+private fun Pager() {
+    ProductPhotos()
+
+}
+
+/**
 @Preview(showSystemUi = true)
 @Composable
 private fun text() {
-    TextDescription()
+//TextDescription()
 
-}
+}*/
 
 @SuppressLint("UnrememberedMutableState")
 @Preview()
