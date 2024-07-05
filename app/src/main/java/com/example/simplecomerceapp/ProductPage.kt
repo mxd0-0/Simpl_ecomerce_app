@@ -1,6 +1,7 @@
 package com.example.simplecomerceapp
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,10 +23,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.simplecomerceapp.ui.theme.uI.ProductDescription
 import com.example.simplecomerceapp.ui.theme.uI.ProductPhotos
 import com.example.simplecomerceapp.ui.theme.uI.TextDescription
 
@@ -35,7 +34,7 @@ fun ProductPage(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val color = Color(0xFFFFB84D)
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         TopAppBar(modifier = Modifier.fillMaxWidth(), title = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -103,8 +102,3 @@ fun ProductPage(modifier: Modifier = Modifier) {
 
 }
 
-@Preview
-@Composable
-private fun PreviewProduct() {
-    ProductPage()
-}

@@ -13,7 +13,10 @@ fun Nav() {
             Welcome(naveControl)
         }
         composable(route = "Home"){
-            HScreen()
+            HScreen(naveControl)
+        }
+        composable(route = "Product"){
+            ProductPage()
         }
     }
 }

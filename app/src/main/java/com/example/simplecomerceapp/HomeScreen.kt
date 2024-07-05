@@ -23,13 +23,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.simplecomerceapp.ui.theme.uI.SaxophoneProducts
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HScreen(
-    /**navController: NavController*/
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -92,7 +93,9 @@ fun HScreen(
             }
         }
         )
-        SaxophoneProducts()
+        SaxophoneProducts(
+            navController
+        )
     }
 }
 

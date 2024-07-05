@@ -53,7 +53,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -226,7 +225,9 @@ fun ProductCard(
 }
 
 @Composable
-fun SaxophoneProducts() {
+fun SaxophoneProducts(
+    navController: NavController
+) {
     val color = Color(0xFFF5EDE1)
     val productNames = listOf(
         "Alto Saxophone",
@@ -275,7 +276,11 @@ fun SaxophoneProducts() {
                     productName = productNames.random(),
                     price = Random.nextInt(from = 100, until = 350),
                     rating = Random.nextFloat() * (5.0f - 1.0f) + 1.0f,
-                    like = Random.nextBoolean()
+                    like = Random.nextBoolean(),
+                    modifier = Modifier.clickable {
+                        navController.navigate("Product")
+
+                    }
                 )
             }
         }
@@ -309,15 +314,6 @@ fun ShowType(image: Painter) {
 
 }
 
-@Composable
-fun ProductDescription(modifier: Modifier = Modifier) {
-    Column {
-        Text(
-            text = "Color", fontSize = 20.sp, fontWeight = FontWeight.Bold
-        )
-
-    }
-}
 
 @Composable
 fun ColorPicker(
@@ -327,8 +323,9 @@ fun ColorPicker(
         modifier = Modifier.fillMaxWidth()
 
     ) {
-        Text(text = "Color", fontSize = 16.sp, color = Color.Black)
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(15.dp))
+        Text(text = "Color", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(15.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
             colors.forEach { color ->
                 Box(modifier = Modifier
@@ -351,7 +348,7 @@ fun ColorPicker(
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun TextDescription(modifier: Modifier = Modifier) {
+fun TextDescription() {
     val color1 = Color(0xFFF5EDE1)
     val orange = Color(0xFFFFB84D)
     val colors = listOf(Color(0xFFFFC107), Color(0xFFBDBDBD), Color.Black)
@@ -359,29 +356,35 @@ fun TextDescription(modifier: Modifier = Modifier) {
 
     Column(
         modifier = Modifier
-            .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
+            .clip(RoundedCornerShape(topStart = 45.dp, topEnd = 45.dp))
             .background(Color.White)
             .fillMaxWidth()
-            .padding(15.dp),
-        verticalArrangement = Arrangement.Bottom
+            .fillMaxHeight()
+            .padding(20.dp, bottom = 40.dp),
     ) {
         ColorPicker(colors = colors, selectedColor = mutableStateOf(selectedColor))
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(text = "Details", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Includes:")
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Case for Saxophone \"GL CASES\" (The specification of a custom-made product by Wood Stone) Neck Swab Body Swab Cloth Smooth Pad")
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(text = "Includes:", fontSize = 15.sp)
+        Spacer(modifier = Modifier.height(15.dp))
+        Text(
+            text = "Case for Saxophone \"GL CASES\" (The specification of a custom-made product by Wood Stone) Neck Swab Body Swab Cloth Smooth Pad",
+            fontSize = 16.sp
+        )
+        Spacer(modifier = Modifier.height(20.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
             horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.Bottom
         ) {
             Button(
                 onClick = { /*TODO*/ },
                 colors = ButtonDefaults.buttonColors(containerColor = color1),
-                modifier = Modifier.width(156.dp)
+                modifier = Modifier.width(160.dp)
             ) {
                 Text(text = "Add to Cart", color = Color.Black)
 
@@ -403,7 +406,7 @@ fun TextDescription(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ProductPhotos(modifier: Modifier = Modifier) {
+fun ProductPhotos(modifier: Modifier) {
     val background = Color(0xFFF5EDE1)
     val photos = listOf(
         R.drawable.gold,
@@ -422,7 +425,7 @@ fun ProductPhotos(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .clip(
-                RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
+                RoundedCornerShape(topStart = 45.dp, topEnd = 45.dp)
             )
             .fillMaxSize()
             .background(background)
@@ -464,12 +467,7 @@ fun ProductPhotos(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
-@Composable
-private fun Hhhh() {
-    ProductPhotos()
 
-}
 
 @Composable
 fun PageIndicator(pageCount: Int, currentPage: Int, modifier: Modifier = Modifier) {
@@ -499,15 +497,5 @@ fun IndicatorDots(isSelected: Boolean, modifier: Modifier) {
     )
 }
 
-
-@SuppressLint("UnrememberedMutableState")
-@Preview()
-@Composable
-private fun PreviewColorPicker() {
-    val colors = listOf(Color(0xFFFFC107), Color(0xFFBDBDBD), Color.Black)
-    val selectedColor by remember { mutableStateOf(Color(0xFFBDBDBD)) }
-
-    ColorPicker(colors = colors, selectedColor = mutableStateOf(selectedColor))
-}
 
 
