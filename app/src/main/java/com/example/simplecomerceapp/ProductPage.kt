@@ -25,6 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.simplecomerceapp.ui.theme.uI.ProductDescription
+import com.example.simplecomerceapp.ui.theme.uI.ProductPhotos
+import com.example.simplecomerceapp.ui.theme.uI.TextDescription
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,9 +92,12 @@ fun ProductPage(modifier: Modifier = Modifier) {
 
                     )
                     Spacer(modifier = Modifier.width(10.dp))
+
                 }
             }
         )
+        ProductPhotos(modifier = Modifier.fillMaxSize(0.5f))
+        TextDescription()
 
     }
 

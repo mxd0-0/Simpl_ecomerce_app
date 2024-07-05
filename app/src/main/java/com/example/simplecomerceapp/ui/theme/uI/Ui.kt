@@ -1,6 +1,7 @@
 package com.example.simplecomerceapp.ui.theme.uI
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -34,7 +35,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -342,8 +342,7 @@ fun ColorPicker(
                         color = if (color == selectedColor.value) Color.White else Color.Transparent,
                         shape = CircleShape
                     )
-                    .padding(vertical = 10.dp)
-                )
+                    .padding(vertical = 10.dp))
                 Spacer(modifier = Modifier.width(15.dp))
             }
         }
@@ -405,38 +404,44 @@ fun TextDescription(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ProductPhotos(modifier: Modifier = Modifier) {
-    val backgrounf = Color(0xFFF5EDE1)
+    val background = Color(0xFFF5EDE1)
     val photos = listOf(
         R.drawable.gold,
         R.drawable.silver
     )
     val pagerState = rememberPagerState(
-        pageCount =
-        photos.size
+        pageCount = photos.size
     )
     LaunchedEffect(Unit) {
         while (true) {
             delay(2000)
-            val nextpage = (pagerState.currentPage + 1) % photos.size
-            pagerState.animateScrollToPage(nextpage, animationSpec = tween(2000))
+            val nextPage = (pagerState.currentPage + 1) % photos.size
+            pagerState.animateScrollToPage(nextPage, animationSpec = tween(2000))
         }
     }
     Column(
         modifier = Modifier
-            .fillMaxHeight(0.5f)
-            .fillMaxWidth()
-            .background(backgrounf)
+            .clip(
+                RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
+            )
+            .fillMaxSize()
+            .background(background)
+
     ) {
-        Box(modifier = Modifier.wrapContentSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight(0.5f)
+                .fillMaxWidth()
+        ) {
             HorizontalPager(
                 state = pagerState, modifier = Modifier
-                    .padding(26.dp)
+                    .padding(19.dp)
                     .wrapContentSize()
             ) { currentPage ->
                 Card(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(20.dp),
+                        .padding(10.dp),
                     elevation = CardDefaults.cardElevation(3.dp)
                 ) {
                     Image(
@@ -448,37 +453,52 @@ fun ProductPhotos(modifier: Modifier = Modifier) {
 
                 }
             }
-            IconButton(onClick = { /*TODO*/ }) {
-
-                Icon(
-                    painter = ,
-                    contentDescription = "Back",
-                    modifier = Modifier.size(60.dp),
-                    tint =
-                )
-
-            }
-
         }
+        PageIndicator(
+            pageCount = photos.size,
+            currentPage = pagerState.currentPage,
+            modifier = Modifier.padding(bottom = 17.dp)
+        )
+        TextDescription()
 
     }
 }
 
-
-@Preview(showSystemUi = true)
+@Preview
 @Composable
-private fun Pager() {
+private fun Hhhh() {
     ProductPhotos()
 
 }
 
-/**
-@Preview(showSystemUi = true)
 @Composable
-private fun text() {
-//TextDescription()
+fun PageIndicator(pageCount: Int, currentPage: Int, modifier: Modifier = Modifier) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        repeat(pageCount) {
+            IndicatorDots(isSelected = it == currentPage, modifier = modifier)
 
-}*/
+        }
+
+    }
+
+
+}
+
+@Composable
+fun IndicatorDots(isSelected: Boolean, modifier: Modifier) {
+    val size = animateDpAsState(targetValue = if (isSelected) 12.dp else 10.dp, label = "")
+    Box(
+        modifier = modifier
+            .padding(2.dp)
+            .size(size.value)
+            .clip(CircleShape)
+            .background(if (isSelected) Color(0xff373737) else Color(0xA8373737))
+    )
+}
+
 
 @SuppressLint("UnrememberedMutableState")
 @Preview()
@@ -489,4 +509,5 @@ private fun PreviewColorPicker() {
 
     ColorPicker(colors = colors, selectedColor = mutableStateOf(selectedColor))
 }
+
 
